@@ -8,7 +8,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
-open class CollectionEncryptor(
+open class BluEncryptor(
     protected open val password: String = "blu.bamap.ir",
     protected open val salt: String = RandomUtil.nextString(8),
     protected open val separator: String = "|"
