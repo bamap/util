@@ -19,12 +19,16 @@ open class CollectionEncryptor(
     protected open val encryptedCipher: Cipher by lazy { initCipher(secretKey, Cipher.ENCRYPT_MODE, ivParameterSpec) }
     protected open val decryptedCipher: Cipher by lazy { initCipher(secretKey, Cipher.DECRYPT_MODE, ivParameterSpec) }
 
+    open fun encrypt(text: Any): String = encrypt(listOf(text))
+
     open fun encrypt(entries: Collection<Any>): String {
-        return entries.joinToString(separator)
+        val byteArray = entries.joinToString(separator).toByteArray()
+        return Base64.getEncoder().encodeToString(encryptedCipher.doFinal(byteArray))
     }
 
-    open fun decrypt(text: String): List<String> {
-        return String(decryptedCipher.doFinal(Base64.getDecoder().decode(text))).split(separator)
+    open fun decrypt(encryptedText: String): List<String> {
+        val base64 = Base64.getDecoder().decode(encryptedText)
+        return String(decryptedCipher.doFinal(base64)).split(separator)
     }
 
     protected open fun initIvParameterSpec(): IvParameterSpec {
